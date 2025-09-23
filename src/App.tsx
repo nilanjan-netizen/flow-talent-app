@@ -3,10 +3,26 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { Layout } from "./components/Layout";
+import Dashboard from "./pages/Dashboard";
+import Jobs from "./pages/Jobs";
+import Candidates from "./pages/Candidates";
 import NotFound from "./pages/NotFound";
+import { setupMirageServer } from "./lib/mirage";
 
-const queryClient = new QueryClient();
+// Initialize MirageJS server
+if (import.meta.env.DEV) {
+  setupMirageServer();
+}
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -15,7 +31,14 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="jobs" element={<Jobs />} />
+            <Route path="candidates" element={<Candidates />} />
+            <Route path="assessments" element={<div>Assessments Page - Coming Soon</div>} />
+            <Route path="analytics" element={<div>Analytics Page - Coming Soon</div>} />
+            <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
+          </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
