@@ -25,8 +25,8 @@ import type { CandidateFilters, CandidateStage } from '@/types';
 
 const stages: { value: CandidateStage; label: string; color: string }[] = [
   { value: 'applied', label: 'Applied', color: 'stage-applied' },
-  { value: 'screening', label: 'Screening', color: 'stage-screening' },
-  { value: 'interview', label: 'Interview', color: 'stage-interview' },
+  { value: 'screen', label: 'Screening', color: 'stage-screening' },
+  { value: 'tech', label: 'Technical Interview', color: 'stage-interview' },
   { value: 'offer', label: 'Offer', color: 'stage-offer' },
   { value: 'hired', label: 'Hired', color: 'stage-hired' },
   { value: 'rejected', label: 'Rejected', color: 'stage-rejected' },

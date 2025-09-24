@@ -36,8 +36,8 @@ export default function Dashboard() {
       bgColor: 'bg-blue-600/10',
     },
     {
-      title: 'Interviews Scheduled',
-      value: candidatesData?.data?.filter(c => c.stage === 'interview').length || 0,
+      title: 'Technical Interviews',
+      value: candidatesData?.data?.filter(c => c.stage === 'tech').length || 0,
       icon: Clock,
       description: '8 this week',
       color: 'text-orange-600',

@@ -29,8 +29,8 @@ export interface Candidate {
 
 export type CandidateStage = 
   | 'applied' 
-  | 'screening' 
-  | 'interview' 
+  | 'screen' 
+  | 'tech' 
   | 'offer' 
   | 'hired' 
   | 'rejected';

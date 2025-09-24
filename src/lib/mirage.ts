@@ -19,11 +19,11 @@ import {
   userStorage
 } from './storage';
 
-// Helper to simulate network latency
+// Helper to simulate network latency (200-1200ms)
 const delay = () => Math.random() * 1000 + 200;
 
-// Helper to simulate occasional errors
-const shouldError = () => Math.random() < 0.05; // 5% error rate
+// Helper to simulate occasional errors (5-10% error rate)
+const shouldError = () => Math.random() < 0.075; // 7.5% error rate
 
 // Generate slug from title
 const generateSlug = (title: string) => {
@@ -39,7 +39,7 @@ const generateSlug = (title: string) => {
 const generateJobs = (): Job[] => {
   const titles = [
     'Senior Frontend Developer',
-    'Product Manager',
+    'Product Manager', 
     'UX/UI Designer',
     'DevOps Engineer',
     'Data Scientist',
@@ -69,7 +69,7 @@ const generateJobs = (): Job[] => {
   const locations = ['Remote', 'San Francisco', 'New York', 'London', 'Berlin', 'Toronto'];
   const tagOptions = ['React', 'TypeScript', 'Node.js', 'Python', 'AWS', 'Docker', 'Kubernetes', 'SQL', 'NoSQL', 'GraphQL'];
 
-  return titles.map((title, index) => ({
+  return titles.slice(0, 25).map((title, index) => ({
     id: uuidv4(),
     title,
     slug: generateSlug(title),
@@ -87,12 +87,12 @@ const generateJobs = (): Job[] => {
 const generateCandidates = (jobs: Job[]): Candidate[] => {
   const firstNames = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Avery', 'Quinn', 'Blake', 'Sage'];
   const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez'];
-  const stages: CandidateStage[] = ['applied', 'screening', 'interview', 'offer', 'hired', 'rejected'];
+  const stages: CandidateStage[] = ['applied', 'screen', 'tech', 'offer', 'hired', 'rejected'];
   
   const candidates: Candidate[] = [];
   
-  // Generate 1000+ candidates
-  for (let i = 0; i < 1200; i++) {
+  // Generate exactly 1000 candidates
+  for (let i = 0; i < 1000; i++) {
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
     const job = jobs[Math.floor(Math.random() * jobs.length)];
@@ -150,9 +150,22 @@ const generateAssessments = (jobs: Job[]): Assessment[] => {
         {
           title: 'Programming Experience',
           questions: [
-            { type: 'single_choice', title: 'Years of experience with React?', options: ['0-1', '2-3', '4-5', '6+'] },
-            { type: 'multiple_choice', title: 'Which technologies have you used?', options: ['TypeScript', 'Node.js', 'GraphQL', 'AWS'] },
+            { type: 'single_choice', title: 'Years of experience with React?', options: ['0-1', '2-3', '4-5', '6+'], required: true },
+            { type: 'multiple_choice', title: 'Which technologies have you used?', options: ['TypeScript', 'Node.js', 'GraphQL', 'AWS'], required: false },
             { type: 'long_text', title: 'Describe your most challenging project', required: true },
+            { type: 'single_choice', title: 'Preferred development environment?', options: ['VS Code', 'WebStorm', 'Vim', 'Other'], required: true },
+            { type: 'numeric', title: 'How many years of total programming experience?', required: true },
+            { type: 'short_text', title: 'Primary programming language?', required: true },
+          ]
+        },
+        {
+          title: 'Problem Solving',
+          questions: [
+            { type: 'long_text', title: 'Describe how you would approach debugging a performance issue', required: true },
+            { type: 'single_choice', title: 'Preferred testing approach?', options: ['Unit tests', 'Integration tests', 'E2E tests', 'All of the above'], required: true },
+            { type: 'multiple_choice', title: 'Which design patterns have you used?', options: ['Observer', 'Factory', 'Singleton', 'MVC'], required: false },
+            { type: 'short_text', title: 'Favorite development tool?', required: false },
+            { type: 'long_text', title: 'Explain a complex technical concept to a non-technical person', required: true },
           ]
         }
       ]
@@ -163,8 +176,48 @@ const generateAssessments = (jobs: Job[]): Assessment[] => {
         {
           title: 'Work Style',
           questions: [
-            { type: 'single_choice', title: 'Preferred work environment?', options: ['Remote', 'Office', 'Hybrid'] },
+            { type: 'single_choice', title: 'Preferred work environment?', options: ['Remote', 'Office', 'Hybrid'], required: true },
             { type: 'short_text', title: 'What motivates you at work?', required: true },
+            { type: 'single_choice', title: 'Team size preference?', options: ['Small (2-5)', 'Medium (6-10)', 'Large (10+)'], required: false },
+            { type: 'multiple_choice', title: 'Communication preferences?', options: ['Slack', 'Email', 'Video calls', 'In-person'], required: false },
+            { type: 'long_text', title: 'Describe your ideal workday', required: true },
+            { type: 'numeric', title: 'Preferred hours per week?', required: false },
+          ]
+        },
+        {
+          title: 'Values & Goals',
+          questions: [
+            { type: 'long_text', title: 'What are your career goals for the next 2 years?', required: true },
+            { type: 'single_choice', title: 'Learning style preference?', options: ['Self-directed', 'Mentorship', 'Formal training', 'Peer learning'], required: true },
+            { type: 'short_text', title: 'Most important workplace value?', required: true },
+            { type: 'multiple_choice', title: 'Interests outside of work?', options: ['Sports', 'Reading', 'Travel', 'Music', 'Gaming'], required: false },
+            { type: 'long_text', title: 'Why do you want to work here?', required: true },
+          ]
+        }
+      ]
+    },
+    {
+      title: 'Leadership & Communication Assessment',
+      sections: [
+        {
+          title: 'Leadership Experience',
+          questions: [
+            { type: 'single_choice', title: 'Have you led a team before?', options: ['Yes, formally', 'Yes, informally', 'No, but interested', 'No preference'], required: true },
+            { type: 'long_text', title: 'Describe a challenging team situation you handled', required: true },
+            { type: 'multiple_choice', title: 'Leadership qualities you possess?', options: ['Empathy', 'Vision', 'Decisiveness', 'Communication'], required: false },
+            { type: 'short_text', title: 'Preferred leadership style?', required: false },
+            { type: 'numeric', title: 'Largest team size you\'ve managed?', required: false },
+          ]
+        },
+        {
+          title: 'Communication Skills',
+          questions: [
+            { type: 'long_text', title: 'How do you handle conflict resolution?', required: true },
+            { type: 'single_choice', title: 'Presentation comfort level?', options: ['Very comfortable', 'Somewhat comfortable', 'Uncomfortable', 'Terrified'], required: true },
+            { type: 'multiple_choice', title: 'Communication strengths?', options: ['Written', 'Verbal', 'Visual', 'Non-verbal'], required: false },
+            { type: 'short_text', title: 'How do you give feedback?', required: true },
+            { type: 'long_text', title: 'Describe a time you had to explain a complex idea', required: true },
+            { type: 'single_choice', title: 'Meeting preference?', options: ['Short & frequent', 'Long & detailed', 'As needed', 'Avoid when possible'], required: false },
           ]
         }
       ]
@@ -369,12 +422,12 @@ export const setupMirageServer = () => {
 
       this.patch('/jobs/:id/reorder', async (schema, request) => {
         // Occasionally return error to test rollback
-        if (Math.random() < 0.1) {
+        if (shouldError()) {
           return new Response(500, {}, { message: 'Reorder failed - server error' });
         }
 
         const { id } = request.params;
-        const { newOrder } = JSON.parse(request.requestBody);
+        const { fromOrder, toOrder } = JSON.parse(request.requestBody);
         const jobs: Job[] = await jobStorage.getAll();
         
         const jobIndex = jobs.findIndex(job => job.id === id);
@@ -382,7 +435,7 @@ export const setupMirageServer = () => {
           return new Response(404, {}, { message: 'Job not found' });
         }
 
-        jobs[jobIndex].order = newOrder;
+        jobs[jobIndex].order = toOrder;
         jobs[jobIndex].updatedAt = new Date().toISOString();
 
         await jobStorage.setAll(jobs);
