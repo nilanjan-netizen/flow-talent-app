@@ -61,8 +61,10 @@ export default function Jobs() {
       const newOrder = arrayMove(jobsData.data, oldIndex, newIndex);
       
       // Update the order values and trigger the API call
+      const fromOrder = oldIndex;
+      const toOrder = newIndex;
       reorderJobMutation.mutate(
-        { id: active.id, newOrder: newIndex },
+        { id: active.id, fromOrder, toOrder },
         {
           onError: () => {
             toast({

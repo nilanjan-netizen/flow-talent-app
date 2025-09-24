@@ -87,12 +87,12 @@ export const useReorderJob = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ id, newOrder }: { id: string; newOrder: number }) =>
+    mutationFn: ({ id, fromOrder, toOrder }: { id: string; fromOrder: number; toOrder: number }) =>
       fetcher<Job>(`/jobs/${id}/reorder`, {
         method: 'PATCH',
-        body: JSON.stringify({ newOrder }),
+        body: JSON.stringify({ fromOrder, toOrder }),
       }),
-    onMutate: async ({ id, newOrder }) => {
+    onMutate: async ({ id, toOrder }) => {
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['jobs'] });
 
@@ -106,7 +106,7 @@ export const useReorderJob = () => {
         return {
           ...old,
           data: old.data.map((job: Job) =>
-            job.id === id ? { ...job, order: newOrder } : job
+            job.id === id ? { ...job, order: toOrder } : job
           ).sort((a: Job, b: Job) => a.order - b.order)
         };
       });
@@ -194,6 +194,23 @@ export const useSubmitAssessment = () => {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assessment-responses'] });
+    },
+  });
+};
+
+// Users API hooks
+// Create candidate API hook
+export const useCreateCandidate = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (candidateData: Partial<Candidate>) =>
+      fetcher<Candidate>('/candidates', {
+        method: 'POST',
+        body: JSON.stringify(candidateData),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['candidates'] });
     },
   });
 };

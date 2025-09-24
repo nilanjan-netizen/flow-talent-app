@@ -488,6 +488,33 @@ export const setupMirageServer = () => {
         };
       });
 
+      // Create candidate
+      this.post('/candidates', async (schema, request) => {
+        if (shouldError()) {
+          return new Response(500, {}, { message: 'Server error occurred' });
+        }
+
+        const attrs = JSON.parse(request.requestBody);
+        const candidates: Candidate[] = await candidateStorage.getAll();
+        
+        const newCandidate: Candidate = {
+          id: `candidate-${Date.now()}`,
+          name: attrs.name,
+          email: attrs.email,
+          jobId: attrs.jobId,
+          stage: attrs.stage || 'applied',
+          notes: [],
+          appliedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          ...attrs
+        };
+
+        candidates.push(newCandidate);
+        await candidateStorage.setAll(candidates);
+        
+        return newCandidate;
+      });
+
       this.patch('/candidates/:id', async (schema, request) => {
         if (shouldError()) {
           return new Response(500, {}, { message: 'Failed to update candidate' });
