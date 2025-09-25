@@ -10,6 +10,7 @@ import JobDetail from "./pages/JobDetail";
 import Candidates from "./pages/Candidates";
 import CandidateDetail from "./pages/CandidateDetail";
 import AssessmentBuilder from "./pages/AssessmentBuilder";
+import Assessments from "./pages/Assessments";
 import NotFound from "./pages/NotFound";
 import { setupMirageServer } from "./lib/mirage";
 
@@ -41,7 +42,7 @@ const App = () => (
             <Route path="candidates" element={<Candidates />} />
             <Route path="candidates/:candidateId" element={<CandidateDetail />} />
             <Route path="assessments/:jobId" element={<AssessmentBuilder />} />
-            <Route path="assessments" element={<div>Assessments Page - Coming Soon</div>} />
+            <Route path="assessments" element={<Assessments />} />
             <Route path="analytics" element={<div>Analytics Page - Coming Soon</div>} />
             <Route path="settings" element={<div>Settings Page - Coming Soon</div>} />
           </Route>
