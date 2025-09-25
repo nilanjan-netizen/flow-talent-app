@@ -621,6 +621,25 @@ export const setupMirageServer = () => {
         return newResponse;
       });
 
+      // Assessment responses endpoint
+      this.get('/assessment-responses', async (schema, request) => {
+        await delay();
+        const responses: AssessmentResponse[] = await assessmentResponseStorage.getAll();
+        const url = new URL(request.url);
+        const candidateId = url.searchParams.get('candidateId');
+        const assessmentId = url.searchParams.get('assessmentId');
+        
+        let filtered = responses;
+        if (candidateId) {
+          filtered = filtered.filter(r => r.candidateId === candidateId);
+        }
+        if (assessmentId) {
+          filtered = filtered.filter(r => r.assessmentId === assessmentId);
+        }
+        
+        return filtered;
+      });
+
       // Users endpoint
       this.get('/users', async () => {
         return await userStorage.getAll();

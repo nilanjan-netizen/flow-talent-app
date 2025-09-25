@@ -194,6 +194,17 @@ export const useSubmitAssessment = () => {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['assessment-responses'] });
+      queryClient.invalidateQueries({ queryKey: ['candidates'] });
+    },
+  });
+};
+
+export const useAssessmentResponses = (filters?: { candidateId?: string; assessmentId?: string }) => {
+  return useQuery({
+    queryKey: ['assessment-responses', filters],
+    queryFn: () => {
+      const queryString = filters ? buildQueryString(filters) : '';
+      return fetcher<AssessmentResponse[]>(`/assessment-responses?${queryString}`);
     },
   });
 };
