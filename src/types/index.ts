@@ -104,15 +104,16 @@ export interface QuestionOption {
 export interface QuestionValidation {
   minLength?: number;
   maxLength?: number;
-  minValue?: number;
-  maxValue?: number;
+  min?: number;
+  max?: number;
   pattern?: string;
+  customMessage?: string;
 }
 
 export interface ConditionalLogic {
   dependsOn: string; // question ID
-  condition: 'equals' | 'not_equals' | 'contains';
-  value: string;
+  condition: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
+  value: string | number;
 }
 
 export interface AssessmentResponse {
